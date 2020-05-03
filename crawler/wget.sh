@@ -11,18 +11,19 @@ set -e
 ###   None
 ###
 ### Input:
-###   コマンドライン引数で与えられた CSV ファイル群
+###   - コマンドライン引数で与えられた CSV ファイル群
+###   - CSV に含まれる URL リソース（実際の通信を行いデータを引っ張ってくる）
 ###
 ### Output:
 ###   ./www-data/*
 ###
-### Usage (run script directly)
+### Usage (run script directly):
 ###   $ ./crawler/wget.sh {file1} [{file2}] [{file3}] ...
 ###
 ###   e.g.) $ ./crawler/wget.sh data/test.csv
 ###         $ ./crawler/wget.sh data/gov.csv data/pref.csv data/city.csv
 ###
-### Usage (make command)
+### Usage (make command):
 ###   $ make wget
 ###
 
