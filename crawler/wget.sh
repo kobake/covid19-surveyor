@@ -2,16 +2,28 @@
 set -e
 
 ###
-### About
-### 引数で指定されたCSVファイルを対象にミラーリングするシェルスクリプト
-### CSVのフォーマットは
-### 組織名,略称,URL
+### About:
+###   引数で指定されたCSVファイルを対象にミラーリングするシェルスクリプト
+###   入力CSVのフォーマットは
+###   組織名,略称,URL
 ###
-### Dependency
-### - None
+### Dependency:
+###   None
 ###
-### Usage
-### - make wget
+### Input:
+###   コマンドライン引数で与えられた CSV ファイル群
+###
+### Output:
+###   ./www-data/*
+###
+### Usage (run script directly)
+###   $ ./crawler/wget.sh {file1} [{file2}] [{file3}] ...
+###
+###   e.g.) $ ./crawler/wget.sh data/test.csv
+###         $ ./crawler/wget.sh data/gov.csv data/pref.csv data/city.csv
+###
+### Usage (make command)
+###   $ make wget
 ###
 
 . ./lib/url-helper.sh

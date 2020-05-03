@@ -31,7 +31,7 @@ get_row_by_url() {
     url=$1
     orgname=$(get_orgname_by_url $url)
     prefname=$(get_prefname_by_url $url)
-    res=$(wget -q -O - --timeout=5 $url)
+    res=$(wget -q -O - --timeout=5 $url) # ここが重い
     if [ $? -ne 0 ]; then
         echo "RETURN"
         return 1
@@ -64,29 +64,34 @@ main() {
 
     # 走査
     for key in ${keys[@]}; do
-        # 進捗表示
+        # -- -- 進捗表示 -- -- #
         i=$((i+1))
         >&2 echo "... url-vote-reduce $i/$total $key"
 
-        # 判定
+        # -- -- 判定 -- -- #
+        # Redis のキー値から MD5 を抽出
+        # 例: vscovid-crawler-vote:result-a69422fd8877321cd534d983de001720 -> a69422fd8877321cd534d983de001720
         md5=$(echo $key| cut -d'-' -f 4)
+
+        # 投票によるスコア値が 0 以下の場合は出力を行わない
         score=$(redis-cli GET $key)
         if [[ $score == "0" ]]; then
             continue
         elif [[ $score == -* ]]; then
             continue
         fi
+
+        # MD5 -> URL
         url=`get_url_by_md5 $md5`
         if [[ $url == "" ]]; then
             continue
         fi
 
-        # 進捗表示
+        # -- -- 進捗表示 -- -- #
         >&2 echo "... -> url = $url"
 
-        # 出力
-        echo `get_row_by_url $url $label`
-        # get_row_by_url $url
+        # -- -- 出力 -- -- #
+        echo `get_row_by_url $url`
     done
 }
 
