@@ -18,6 +18,9 @@ set -e
 #   ....
 #   --------------------------------------------------------------------------------
 #
+# Input:
+#   Redis: Key: vscovid-crawler-vote:result-{url_hash} ... vote 方式の全投票
+#          Value: "-2", "-1", "0", "1", "2", ... 等の投票結果を示す数値文字列
 
 # 依存lib
 . ./lib/_common.sh
@@ -30,6 +33,7 @@ get_row_by_url() {
     prefname=$(get_prefname_by_url $url)
     res=$(wget -q -O - --timeout=5 $url)
     if [ $? -ne 0 ]; then
+        echo "RETURN"
         return 1
     fi
     title=$(get_title_by_res "$res")
@@ -82,13 +86,7 @@ main() {
 
         # 出力
         echo `get_row_by_url $url $label`
-        bool=$(echo ${result}| cut -d',' -f 4)
-        if [ "${bool}" = "true" ]; then
-            url=$(echo ${result}| cut -d',' -f 1)
-            set +e
-            get_row_by_url $url
-            set -e
-        fi
+        # get_row_by_url $url
     done
 }
 
